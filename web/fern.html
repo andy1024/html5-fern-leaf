@@ -1,0 +1,84 @@
+<canvas id="canvas1" width="640", height="400" style="background-color:rgba(0,0,145, 255);">
+Random Canvas
+</canvas>
+
+<script type="text/javascript">
+function setPixel(imageData, x, y, r, g, b, a) {
+    index = (x + y * imageData.width) * 4;
+    imageData.data[index+0] = r;
+    imageData.data[index+1] = g;
+    imageData.data[index+2] = b;
+    imageData.data[index+3] = a;
+}
+
+element = document.getElementById("canvas1");
+c = element.getContext("2d");
+
+// read the width and height of the canvas
+width = element.width;
+height = element.height;
+
+// create a new pixel array
+imageData = c.createImageData(width, height);
+/*
+  var p = [0,0.2,-0.15,0.85];
+  var q = [0,-0.26,0.28,0.04];
+  var r = [0,0.23,0.26,-0.04];
+  var s = [0.16,0.22,0.24,0.85];
+  var t = [0,0,0,0];
+  var u = [0,1.6,0.44,1.6];
+  var a = [10,80,150,1000];
+  */
+  var p = [0,0.2,-0.15,0.85];
+  var q = [0,-0.26,0.28,0.04];
+  var r = [0,0.23,0.26,-0.04];
+  var s = [0.16,0.22,0.24,0.85];
+  var t = [0,0,0,0];
+  var u = [0,1.6,0.44,1.6];
+  var a = [10,80,150,1000];
+
+  x=0.0;
+  y=0.0;
+  k=0;
+  x1=0.0;
+// draw nearly random dots
+for (i = 0; i < 200000; i++) {
+    j=Math.random()*1000|0;
+	for (n=3;n>0;--n) {
+		if (j<a[n]) {
+			k=n;
+		}
+	}
+	x1=(p[k]*x)+(q[k]*y)+t[k];
+	y=(r[k]*x)+(s[k]*y)+u[k];
+	x=x1;
+    xpoint = (x * 50)+250 | 0; // |0 to truncate to Int32
+    ypoint = (400-(y * 30)) | 0;
+    setPixel(imageData, xpoint, ypoint, 0, 255, 0, 255); // 255 opaque
+	//console.log("j=%d,xp=%d,yp=%d,x=%f,y=%f", j,xpoint, ypoint,x,y);
+}
+
+// copy the image data back onto the canvas
+c.putImageData(imageData, 0, 0); // at coords 0,0
+
+</script>
+
+<!--
+Amstrad CPC Basic
+1 ' Sierpinski Fern
+2 ' by Simon Watson
+3 ' (c)1991
+4 '
+10 MODE 2:INK 1,19:INK 0,1:BORDER 1:p(0)=0:p(1)=0.2:p(2)=-0.15
+20 p(3)=0.85:q(0)=0:q(1)=-0.26:q(2)=0.28
+30 q(3)=0.04:r(0)=0:r(1)=0.23:r(2)=0.26
+40 r(3)=-0.04:s(0)=0.16:s(1)=0.22:s(2)=0.24
+50 s(3)=0.85:t(0)=0:t(1)=0:t(2)=0:t(3)=0
+60 u(0)=0:u(1)=1.6:u(2)=0.44:u(3)=1.6
+70 a(0)=10:a(1)=80:a(2)=150:a(3)=1000
+80 j=INT(RND*1000):FOR n=3 TO 0 STEP-1:IF j<a(n) THEN k=n
+90 NEXT:x1=(p(k)*x)+(q(k)*y)+t(k):y=(r(k)*x)+(s(k)*y)+u(k)
+100 x=x1:PLOT (x*50)+250,y*30:GOTO 80
+
+   x: Math.random() * 800 << 0,
+-->
